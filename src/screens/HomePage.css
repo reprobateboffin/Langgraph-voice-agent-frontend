@@ -1,0 +1,174 @@
+/* General */
+.homepage {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  color: #111827;
+  font-family: Arial, sans-serif;
+}
+
+/* Navigation */
+.nav {
+  border-bottom: 1px solid #e5e7eb;
+}
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: 750px;
+  gap: 8px;
+}
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.nav-buttons button {
+  margin-left: 8px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #031c61;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-primary:hover {
+  background-color: #041741;
+}
+.btn-outline {
+  background-color: #fff;
+  color: #062d81;
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+.hero-content p {
+  font-size: 1.25rem;
+  margin-bottom: 32px;
+}
+.hero-buttons button {
+  margin-right: 16px;
+}
+
+/* Features Grid */
+.features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+.features h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 48px;
+  text-align: center;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+}
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #3b82f61a; /* semi-transparent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* CTA Section */
+.cta {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 96px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+.cta-card {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+}
+.cta-card h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.cta-card p {
+  font-size: 1.125rem;
+  margin-bottom: 24px;
+}
+
+/* Icons */
+.icon {
+  width: 24px;
+  height: 24px;
+  color: #3b82f6;
+}
+.icon-small {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+.title-heading {
+  width: 50%;          /* half of parent width */
+}
+
+.title-heading h1 {
+  font-size: 3.5rem;   /* adjust as needed */
+  white-space: normal; /* allow wrapping */
+  overflow: visible;   /* don't hide text */
+  word-break: break-word; /* break long words if necessary */
+  text-align: left;
+  margin: 0;
+}
+.title-subtext {
+  width: 60%;           /* occupy 60% of parent width */
+}
+
+.title-subtext p {
+  font-size: 1.2rem;      /* adjust as needed */
+  white-space: normal;  /* allow wrapping */
+  overflow: visible;    /* don't hide overflow */
+  word-break: break-word; /* break long words if necessary */
+  text-align: left;     /* align text to the left */
+  margin: 8px 0 0 0;    /* optional: small margin on top */
+  line-height: 1.5;     /* optional: improve readability */
+  color: gray;
+  margin-bottom: 4%;
+}

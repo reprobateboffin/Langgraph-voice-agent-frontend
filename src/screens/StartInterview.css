@@ -1,0 +1,83 @@
+
+/* ------------------------- StartInterview.css ------------------------- */
+
+/* Container */
+.interview-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background: #f8f9fa;
+}
+
+/* Avatar */
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #d1d1d1;
+  transition: 0.3s ease;
+}
+
+.avatar.recording {
+  background: #0d6efd;
+  animation: pulse 1.5s infinite;
+}
+
+.avatar.muted {
+  background: #bcbcbc;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Status Text */
+.status-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Buttons */
+.controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn.start {
+  background: #198754;
+  color: white;
+}
+
+.btn.mic {
+  background: #0d6efd;
+  color: white;
+}
+
+.btn.end {
+  background: #dc3545;
+  color: white;
+}
+
+.btn:hover {
+  filter: brightness(0.9);
+}

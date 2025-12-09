@@ -1,0 +1,370 @@
+/* FeedbackScreen.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.feedback-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+  color: #333;
+  background-color: white;
+  min-height: 100vh;
+}
+
+.feedback-container h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 15px;
+}
+
+.candidate-info {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.candidate-info p {
+  margin: 12px 0;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.questions-feedback {
+  margin-bottom: 50px;
+}
+
+.questions-feedback h2 {
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 12px;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.feedback-item {
+  border: 1px solid #e1e8ed;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feedback-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feedback-item h3 {
+  color: #2c3e50;
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  margin: -30px -30px 25px -30px;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.qa-pair {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border-left: 5px solid #00b894;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.qa-pair .question,
+.qa-pair .answer {
+  margin-bottom: 20px;
+}
+
+.qa-pair h4 {
+  color: #2d3436;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3em;
+}
+
+.qa-pair p {
+  margin: 0;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-style: italic;
+  line-height: 1.5;
+  font-size: 1.1em;
+}
+
+.feedback-section {
+  margin: 30px 0;
+}
+
+.feedback-section h4 {
+  color: #34495e;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  border-left: 5px solid #3498db;
+  padding-left: 15px;
+  font-weight: 600;
+}
+
+.feedback-details {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  border-left: 5px solid #27ae60;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.rating {
+  font-size: 1.3em;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 700;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid #e9ecef;
+}
+
+.feedback-breakdown h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+  border: none;
+  padding: 0;
+}
+
+.feedback-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.feedback-category {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.feedback-category:hover {
+  transform: translateX(5px);
+}
+
+.feedback-category h5 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.score {
+  background: #3498db;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.feedback-category p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.05em;
+}
+
+.overall-comment {
+  background: linear-gradient(135deg, #ffeaa7, #fab1a0) !important;
+  border-color: #fd79a8 !important;
+}
+
+.feedback-content p {
+  line-height: 1.6;
+  margin: 0;
+  color: #555;
+  font-size: 1.1em;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #e17055;
+}
+
+.final-evaluation {
+  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+  padding: 40px;
+  border-radius: 20px;
+  margin-top: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.final-evaluation h2 {
+  color: white;
+  margin-top: 0;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 700;
+}
+
+.eval-section {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border-left: 5px solid #e17055;
+  color: #2d3436;
+}
+
+.eval-section h3 {
+  color: #2d3436;
+  margin-top: 0;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.score-badge {
+  background: #e17055;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1.3em;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.eval-section p {
+  margin: 0;
+  color: #2d3436;
+  font-size: 1.15em;
+  line-height: 1.6;
+}
+
+.eval-section ul {
+  margin: 15px 0;
+  padding-left: 25px;
+}
+
+.eval-section li {
+  margin: 10px 0;
+  line-height: 1.5;
+  color: #2d3436;
+  font-size: 1.1em;
+}
+
+.recommendation {
+  font-weight: 600;
+  font-size: 1.2em !important;
+  color: #e17055 !important;
+}
+
+.no-feedback {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+  font-size: 1.3em;
+  background: #f8f9fa;
+  border-radius: 15px;
+  border: 2px dashed #bdc3c7;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .feedback-container {
+    padding: 15px;
+  }
+  
+  .feedback-item {
+    padding: 20px;
+  }
+  
+  .feedback-item h3 {
+    margin: -20px -20px 20px -20px;
+    padding: 12px 20px;
+  }
+  
+  .final-evaluation {
+    padding: 25px;
+  }
+  
+  .candidate-info {
+    padding: 20px;
+  }
+  
+  .feedback-container h1 {
+    font-size: 2em;
+  }
+  
+  .questions-feedback h2 {
+    font-size: 1.6em;
+  }
+}
+
+/* Remove any default body margins */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+/* Add to FeedbackScreen.css */
+.debug-section {
+  background: #fff3cd;
+  border: 2px solid #ffeaa7;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.debug-item {
+  margin: 15px 0;
+}
+
+.debug-item h3 {
+  color: #856404;
+  margin-bottom: 10px;
+}
+
+.debug-item pre {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  overflow-x: auto;
+  font-size: 12px;
+}
