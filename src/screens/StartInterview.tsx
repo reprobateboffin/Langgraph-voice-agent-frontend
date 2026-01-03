@@ -14,12 +14,14 @@ const StartInterview = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const tokenData = (location.state as { tokenData: TokenData })?.tokenData;
+  // const tokenData = (location.state as { tokenData: TokenData })?.tokenData;
+  const { job_title, question_type, question_no, cv, username, room_name } = location.state || {};
 
+  // state: { job_title: position,question_type: difficulty, cv:cv, username:name, room_name: room_name, question_no: questions}
 
   const handleStart = () => {
-    navigate('/meeting-room')
-    console.log(`our room name is ${tokenData.room_name} with token ${tokenData.token}`)
+    navigate('/meeting-room', {state:{ job_title: job_title,question_type: question_type, cv:cv, username:username, room_name: room_name, question_no: question_no}})
+    console.log(`our room name is ${room_name}`)
   };
 
   const toggleMic = () => setIsRecording(!isRecording);
@@ -36,7 +38,7 @@ const StartInterview = () => {
       </div>
 
       <h2 className="status-text">
-        <div>{tokenData.room_name}</div>
+        <div>Hello {username}, room {room_name} is ready for Position {job_title} with difficulty {question_type} and {question_no} questions</div>
         {!isStarted && "Ready to Start"}
         {isStarted && isRecording && "AI Interviewer is Listening..."}
         {isStarted && !isRecording && "Microphone Muted"}

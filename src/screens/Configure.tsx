@@ -14,25 +14,14 @@ difficulty: string;
 questions: number;
 cv: File | null;
 }
-type TokenData = {
-  token: string;
-  url: string;
-  room_name: string;
-};
+
 
 const Configure: React.FC = () => {
-    const [tokenData, setTokenData] = useState<TokenData>();
 
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
-  const formData = useInterviewStore((s) => s.form);
-  const updateField = useInterviewStore((s) => s.setField);
   const saveInterview = useInterviewStore((s) => s.saveInterview);
-  const setThreadId = useInterviewStore((s)=> s.setThreadId)
-  const setInterviewStarted = useInterviewStore((s)=> s.setInterviewStarted)
-  const addMessage = useInterviewStore((s)=> s.addMessage)
-  const {mode} = useInterviewStore();
   const [name, setName] = useState("Akbar");
   const [position, setPosition] = useState("JS intern");
   const [difficulty, setDifficulty] = useState("Broad");
@@ -48,8 +37,9 @@ const Configure: React.FC = () => {
   };
    const joinRoom = async () => {
       try {
-        const data = await api.joinMeeting(name);
-        setTokenData(data);
+        // const data = await api.joinMeeting(name);
+        // setTokenData(data);
+        
       } catch (err) {
         console.error("Failed to join meeting:", err);
       }
@@ -63,32 +53,20 @@ const Configure: React.FC = () => {
             }
     const payload: InterviewForm = {name, position, difficulty, questions, cv}
     saveInterview(payload);
-       const formData = new FormData();
-        formData.append("job_title", position);
-        formData.append("question_type", difficulty);
-        formData.append("cv", cv);
-        // const response = await api.startInterview(formData);
-        // console.log(`RESPONSE HAS BEEN FETCHED and it IS ${response.message}`);
-        // setThreadId(response.thread_id);
-        // setInterviewStarted(true);
-        // addMessage({ role: "assistant", content: response.message , threadId: response.thread_id});
-        // if(response){
-        //   if(mode=='chat'){
-        //   navigate('/meeting-room')}
-        //   if(mode=='voice'){
-        //     navigate('/messages-voice')
-        //   }
-    // alert("Interview Created!");
-    // navigate("/dashboard");
+  function shortUUID() {
+  return Math.random().toString(36).substring(2, 10);
+}
+const roomName = `interview-${shortUUID()}`;
+    
 try {
-  const data = await api.joinMeeting(name);
+  // const data = await api.joinMeeting(name);
 
-  // store it if you still want it in state
-  setTokenData(data);
+  // // store it if you still want it in state
+  // setTokenData(data);
 
   // ✅ pass actual data to next route
 navigate('/start-interview', {
-  state: { tokenData: data }
+  state: {job_title: position,question_type: difficulty, cv:cv, username:name, room_name: roomName, question_no: questions}
 });
 
 } catch (err) {

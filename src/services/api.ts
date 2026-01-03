@@ -24,12 +24,37 @@ export const api = {
         });
         return response.json();
     },
-  joinMeeting: async (username: string) => {
+//   joinMeeting: async (username: string) => {
+//   const response = await fetch(`${BACKEND_URL}/join`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ username }),
+//   });
+//   return response.json();
+// }
+joinMeeting: async (
+  username: string,
+  job_title: string,
+  question_type: string,
+  cv: File | null,
+  room_name: string
+) => {
+  const formData = new FormData();
+  formData.append("username", username);
+  formData.append("job_title", job_title);
+  formData.append("question_type", question_type);
+  formData.append("room_name", room_name)
+
+  if (cv) {
+    formData.append("cv", cv);
+  }
+
   const response = await fetch(`${BACKEND_URL}/join`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username }),
+    body: formData, // NO Content-Type header
   });
+
   return response.json();
 }
+
 };

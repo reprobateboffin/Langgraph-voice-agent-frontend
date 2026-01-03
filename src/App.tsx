@@ -25,7 +25,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/start-interview" element={<StartInterview />} />
 
-          <Route path="/meeting-room" element={<MeetingRoom username="Alice"  />} />
+          <Route path="/meeting-room" element={<MeetingRoom />} />
           <Route path="/feedback" element={<FeedbackScreen />} />
 
         </Routes>

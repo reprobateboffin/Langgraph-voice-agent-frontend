@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
+import { useLocation } from "react-router-dom";
+
 import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import "@livekit/components-styles";
 
@@ -7,13 +9,15 @@ interface MeetingRoomProps {
   username: string;
 }
 
-const MeetingRoom: React.FC<MeetingRoomProps> = ({ username }) => {
+const MeetingRoom: React.FC<{}> = () => {
   const [tokenData, setTokenData] = useState<{ token: string; url: string, room_name:string } | null>(null);
+  const location = useLocation();
+  const { job_title, question_type, question_no, cv, username, room_name } = location.state || {};
 
   useEffect(() => {
     const joinRoom = async () => {
       try {
-        const data = await api.joinMeeting(username);
+        const data = await api.joinMeeting(username, job_title, question_type, cv, room_name);
         setTokenData(data);
       } catch (err) {
         console.error("Failed to join meeting:", err);
