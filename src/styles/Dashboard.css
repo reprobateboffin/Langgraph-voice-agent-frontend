@@ -1,10 +1,17 @@
+/* Dashboard Styles */
+
 .dashboard {
   min-height: 100vh;
-  background-color: var(--background);
+  background: hsl(220, 20%, 7%);
+  color: hsl(40, 10%, 92%);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .dashboard-nav {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid hsla(220, 14%, 18%, 0.6);
+  background: hsla(220, 20%, 7%, 0.7);
+  backdrop-filter: blur(16px) saturate(1.4);
 }
 
 .dashboard-nav-container {
@@ -20,13 +27,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s ease-out;
 }
 
 .dashboard-back-link:hover {
-  color: var(--foreground);
+  color: hsl(38, 92%, 55%);
 }
 
 .dashboard-container {
@@ -41,13 +48,14 @@
 
 .dashboard-title {
   font-size: 2.25rem;
-  font-weight: bold;
-  color: var(--foreground);
+  font-weight: 700;
+  color: hsl(40, 10%, 92%);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
 }
 
 .dashboard-subtitle {
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
 }
 
 /* Analytics Section */
@@ -75,10 +83,17 @@
 }
 
 .stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  background: hsla(220, 18%, 10%, 0.6);
+  border: 1px solid hsla(220, 14%, 18%, 0.6);
+  border-radius: 16px;
   padding: 1.5rem;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.stat-card:hover {
+  border-color: hsla(38, 92%, 55%, 0.3);
+  box-shadow: 0 8px 32px hsla(38, 92%, 55%, 0.08);
 }
 
 .stat-card-header {
@@ -91,46 +106,48 @@
 .stat-card-title {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--card-foreground);
+  color: hsl(220, 10%, 52%);
   margin: 0;
 }
 
 .stat-card-icon {
   width: 1rem;
   height: 1rem;
-  color: var(--primary);
+  color: hsl(38, 92%, 55%);
 }
 
 .stat-card-value {
   font-size: 1.875rem;
-  font-weight: bold;
-  color: var(--card-foreground);
+  font-weight: 700;
+  color: hsl(40, 10%, 92%);
   margin-bottom: 0.25rem;
+  letter-spacing: -0.03em;
 }
 
 .stat-card-description {
   font-size: 0.75rem;
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
   margin: 0;
 }
 
 /* Chart */
 .chart-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  background: hsla(220, 18%, 10%, 0.6);
+  border: 1px solid hsla(220, 14%, 18%, 0.6);
+  border-radius: 16px;
   padding: 1.5rem;
+  backdrop-filter: blur(12px);
 }
 
 .chart-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--card-foreground);
+  color: hsl(40, 10%, 92%);
   margin: 0 0 0.25rem 0;
 }
 
 .chart-description {
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
   margin: 0 0 1rem 0;
 }
 
@@ -150,7 +167,7 @@
 }
 
 .empty-state-text {
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
   margin-bottom: 1rem;
 }
 
@@ -161,14 +178,17 @@
 }
 
 .interview-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  transition: box-shadow 0.2s;
+  background: hsla(220, 18%, 10%, 0.6);
+  border: 1px solid hsla(220, 14%, 18%, 0.6);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease-out, box-shadow 0.3s ease-out, transform 0.2s ease-out;
 }
 
 .interview-card:hover {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-color: hsla(38, 92%, 55%, 0.3);
+  box-shadow: 0 8px 32px hsla(38, 92%, 55%, 0.08), 0 0 0 1px hsla(38, 92%, 55%, 0.1);
+  transform: translateY(-2px);
 }
 
 .interview-card-header {
@@ -189,12 +209,12 @@
 .interview-card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--card-foreground);
+  color: hsl(40, 10%, 92%);
   margin: 0 0 0.25rem 0;
 }
 
 .interview-card-subtitle {
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
   margin: 0;
 }
 
@@ -220,7 +240,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
 }
 
 .interview-meta-icon {
@@ -237,7 +257,7 @@
 
 .interview-email {
   font-size: 0.875rem;
-  color: var(--muted-foreground);
+  color: hsl(220, 10%, 52%);
 }
 
 .interview-actions {
@@ -259,23 +279,23 @@
 
 .badge-outline {
   background: transparent;
-  border-color: var(--border);
-  color: var(--foreground);
+  border-color: hsla(220, 14%, 18%, 0.8);
+  color: hsl(40, 10%, 92%);
 }
 
 .badge-pending {
-  background: var(--muted);
-  color: var(--muted-foreground);
+  background: hsla(220, 14%, 18%, 0.6);
+  color: hsl(220, 10%, 52%);
 }
 
 .badge-completed {
-  background: rgba(var(--primary), 0.1);
-  color: var(--primary);
+  background: hsla(38, 92%, 55%, 0.12);
+  color: hsl(38, 92%, 55%);
 }
 
 .badge-in-progress {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(38, 92%, 55%);
+  color: hsl(220, 20%, 7%);
 }
 
 /* Button Styles */
@@ -283,51 +303,58 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: 10px;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease-out;
   text-decoration: none;
 }
 
 .button:focus {
-  outline: 2px solid transparent;
+  outline: 2px solid hsla(38, 92%, 55%, 0.4);
   outline-offset: 2px;
 }
 
+.button:active {
+  transform: scale(0.97);
+}
+
 .button-primary {
-  background: var(--primary);
-  color: var(--primary-foreground);
-  border-color: var(--primary);
+  background: hsl(38, 92%, 55%);
+  color: hsl(220, 20%, 7%);
+  border-color: hsl(38, 92%, 55%);
+  font-weight: 600;
+  box-shadow: 0 2px 12px hsla(38, 92%, 55%, 0.25);
 }
 
 .button-primary:hover {
-  background: rgba(var(--primary), 0.9);
+  box-shadow: 0 4px 20px hsla(38, 92%, 55%, 0.4);
+  filter: brightness(1.08);
 }
 
 .button-outline {
   background: transparent;
-  color: var(--foreground);
-  border-color: var(--border);
+  color: hsl(40, 10%, 92%);
+  border-color: hsla(220, 14%, 18%, 0.8);
 }
 
 .button-outline:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  border-color: hsla(38, 92%, 55%, 0.4);
+  background: hsla(38, 92%, 55%, 0.05);
 }
 
 .button-destructive {
   background: transparent;
-  color: var(--destructive);
-  border-color: var(--border);
+  color: hsl(0, 72%, 51%);
+  border-color: hsla(220, 14%, 18%, 0.8);
 }
 
 .button-destructive:hover {
-  background: var(--destructive);
-  color: var(--destructive-foreground);
+  background: hsla(0, 72%, 51%, 0.1);
+  border-color: hsla(0, 72%, 51%, 0.4);
 }
 
 .button-sm {
@@ -337,8 +364,9 @@
 
 /* Chart Tooltip */
 .chart-tooltip {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
+  background: hsla(220, 18%, 10%, 0.9);
+  border: 1px solid hsla(220, 14%, 18%, 0.6);
+  border-radius: 10px;
   padding: 0.5rem;
+  color: hsl(40, 10%, 92%);
 }

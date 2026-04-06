@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { api } from "../services/api";
 import { useInterviewStore } from "../store/interviewStore";
 import { useNavigate } from "react-router-dom";
-import './InterviewForm.css'
+import "../styles/InterviewForm.css";
 const InterviewForm: React.FC<{}> = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [candidateName, setCandidateName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
@@ -18,14 +18,13 @@ const InterviewForm: React.FC<{}> = () => {
     { value: "narrow_nonfollowup", label: "4. Narrow, non-follow-up" },
   ];
 
-
   const interviewStarted = useInterviewStore((state) => state.interviewStarted);
-  const {mode} = useInterviewStore();
+  const { mode } = useInterviewStore();
   const onSubmit = async (
     candidateName: string,
     jobTitle: string,
     cvFile: File,
-    questionStyle: string
+    questionStyle: string,
   ) => {
     const formData = new FormData();
     formData.append("job_title", jobTitle);
@@ -35,12 +34,17 @@ const InterviewForm: React.FC<{}> = () => {
     console.log(`RESPONSE HAS BEEN FETCHED and it IS ${response.message}`);
     setThreadId(response.thread_id);
     setInterviewStarted(true);
-    addMessage({ role: "assistant", content: response.message , threadId: response.thread_id});
-    if(response){
-      if(mode=='chat'){
-      navigate('/messages-chat')}
-      if(mode=='voice'){
-        navigate('/messages-voice')
+    addMessage({
+      role: "assistant",
+      content: response.message,
+      threadId: response.thread_id,
+    });
+    if (response) {
+      if (mode == "chat") {
+        navigate("/messages-chat");
+      }
+      if (mode == "voice") {
+        navigate("/messages-voice");
       }
     }
     // handleStartInterviewResponse(response);

@@ -1,84 +1,80 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, Calendar, Clock, Trash2, Eye, TrendingUp, Users, CheckCircle, XCircle } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import "./Dashboard.css";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { ArrowLeft, Plus, Calendar, Trash2, Eye } from "lucide-react";
+import "../styles/Dashboard.css";
 
 interface Interview {
-  id: string;
-  name: string;
-  email: string;
-  company: string;
-  subject: string;
-  difficulty: string;
-  duration: string;
+  _id: string;
+  user_id: string;
+  interview_id: string;
   createdAt: string;
-  status: string;
 }
 
 const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // Gets query parameters
+
+  const isCompany = searchParams.get("isCompany") === "true";
+
+  const { username } = useParams<{ username: string }>();
+  const type = isCompany ? "company" : "user";
+  const userId = username;
+
+  // Fetch interviews from backend
+  const fetchInterviews = async () => {
+    if (!userId) return;
+
+    try {
+      const response = await fetch("http://localhost:8000/get-interviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: userId, type }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch interviews");
+      }
+
+      const data: Interview[] = await response.json();
+      setInterviews(data);
+    } catch (error) {
+      console.error("Error fetching interviews:", error);
+      // Fallback to empty array
+      setInterviews([]);
+    }
+  };
 
   useEffect(() => {
-    const stored = localStorage.getItem("interviews");
-    if (stored) {
-      setInterviews(JSON.parse(stored));
-    }
-  }, []);
+    fetchInterviews();
+  }, [userId]);
 
-  // Calculate statistics
-  const completedInterviews = interviews.filter(i => i.status === "completed");
-  const totalCandidates = new Set(interviews.map(i => i.email)).size;
-  
-  // Mock scores for completed interviews (in production, this would come from actual feedback data)
-  const interviewScores = completedInterviews.map((interview, index) => ({
-    id: interview.id,
-    name: interview.name,
-    score: Math.floor(Math.random() * 3) + 7, // Random score 7-10 for demo
-  }));
+  const handleDelete = async (interviewId: string) => {
+    if (!confirm("Are you sure you want to delete this interview?")) return;
 
-  const averageScore = interviewScores.length > 0 
-    ? (interviewScores.reduce((sum, i) => sum + i.score, 0) / interviewScores.length).toFixed(1)
-    : "0";
-
-  const passedCount = interviewScores.filter(i => i.score >= 7).length;
-  const failedCount = interviewScores.filter(i => i.score < 7).length;
-
-  // Chart data for score distribution
-  const scoreDistribution = Array.from({ length: 10 }, (_, i) => {
-    const score = i + 1;
-    return {
-      score: score.toString(),
-      count: interviewScores.filter(interview => interview.score === score).length,
-    };
-  });
-
-  const handleDelete = (id: string) => {
-    const updated = interviews.filter(i => i.id !== id);
+    // TODO: Implement delete endpoint later
+    const updated = interviews.filter((i) => i.interview_id !== interviewId);
     setInterviews(updated);
-    localStorage.setItem("interviews", JSON.stringify(updated));
-   alert("Interview removed")
+    alert("Interview deleted (frontend only for now)");
   };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending": return "badge-pending";
-      case "completed": return "badge-completed";
-      case "in-progress": return "badge-in-progress";
-      default: return "badge-pending";
-    }
+  const goToResults = (interview_id: string) => {
+    navigate(`/results?interview_id=${encodeURIComponent(interview_id)}`);
   };
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="chart-tooltip">
-          <p>{`Score: ${label}`}</p>
-          <p>{`Candidates: ${payload[0].value}`}</p>
-        </div>
-      );
-    }
-    return null;
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -86,114 +82,62 @@ const Dashboard = () => {
       {/* Navigation */}
       <nav className="dashboard-nav">
         <div className="dashboard-nav-container">
-          <Link to="/" className="dashboard-back-link">
+          <div
+            className="dashboard-back-link"
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          >
             <ArrowLeft className="dashboard-meta-icon" />
-            Back to Home
-          </Link>
-          <Link to="/configure">
-            <button className="button button-primary">
+            Back
+          </div>
+          <div>
+            <button
+              className="button button-primary"
+              onClick={() => {
+                navigate(`/${userId}/configure`);
+              }}
+            >
               <Plus className="dashboard-meta-icon" />
               New Interview
             </button>
-          </Link>
+          </div>
         </div>
       </nav>
 
       <div className="dashboard-container">
         <div className="dashboard-header">
           <h1 className="dashboard-title">Interview Dashboard</h1>
-          <p className="dashboard-subtitle">Manage and review all your interviews</p>
+          <p className="dashboard-subtitle">
+            Manage and review all your interviews
+          </p>
         </div>
 
-        {/* Analytics Section */}
+        {/* Analytics Section - Kept but will be empty until more data is added */}
         {interviews.length > 0 && (
           <div className="analytics-section">
-            {/* Stats Cards */}
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-card-header">
-                  <h3 className="stat-card-title">Average Score</h3>
-                  <TrendingUp className="stat-card-icon" />
+                  <h3 className="stat-card-title">Total Interviews</h3>
                 </div>
-                <div className="stat-card-value">{averageScore}/10</div>
-                <p className="stat-card-description">
-                  Based on {completedInterviews.length} completed
-                </p>
+                <div className="stat-card-value">{interviews.length}</div>
               </div>
-
-              <div className="stat-card">
-                <div className="stat-card-header">
-                  <h3 className="stat-card-title">Total Candidates</h3>
-                  <Users className="stat-card-icon" />
+              {isCompany && (
+                <div className="stat-card">
+                  <div className="stat-card-header">
+                    <h3 className="stat-card-title">User ID</h3>
+                  </div>
+                  <div className="stat-card-value">{userId}</div>
                 </div>
-                <div className="stat-card-value">{totalCandidates}</div>
-                <p className="stat-card-description">
-                  Unique candidates
-                </p>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-card-header">
-                  <h3 className="stat-card-title">Passed</h3>
-                  <CheckCircle className="stat-card-icon" />
-                </div>
-                <div className="stat-card-value">{passedCount}</div>
-                <p className="stat-card-description">
-                  Score ≥ 7/10
-                </p>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-card-header">
-                  <h3 className="stat-card-title">Failed</h3>
-                  <XCircle className="stat-card-icon" />
-                </div>
-                <div className="stat-card-value">{failedCount}</div>
-                <p className="stat-card-description">
-                  Score &lt; 7/10
-                </p>
-              </div>
+              )}
             </div>
-
-            {/* Score Distribution Chart */}
-            {completedInterviews.length > 0 && (
-              <div className="chart-card">
-                <h3 className="chart-title">Interview Scores Distribution</h3>
-                <p className="chart-description">Number of candidates by score (1-10)</p>
-                <div className="chart-container">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={scoreDistribution}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis 
-                        dataKey="score" 
-                        fontSize="12px"
-                        label={{ value: 'Score', position: 'insideBottom', offset: -5 }}
-                      />
-                      <YAxis 
-                        fontSize="12px"
-                        label={{ value: 'Number of Candidates', angle: -90, position: 'insideLeft' }}
-                      />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                        {scoreDistribution.map((entry, index) => (
-                          <Cell 
-                            key={`cell-${index}`}
-                            fill={parseInt(entry.score) >= 7 ? 'var(--primary)' : 'var(--muted-foreground)'}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
           </div>
         )}
 
         {interviews.length === 0 ? (
           <div className="stat-card">
             <div className="empty-state">
-              <p className="empty-state-text">No interviews configured yet</p>
+              <p className="empty-state-text">No interviews found</p>
               <Link to="/configure">
                 <button className="button button-primary">
                   <Plus className="dashboard-meta-icon" />
@@ -205,54 +149,42 @@ const Dashboard = () => {
         ) : (
           <div className="interview-list">
             {interviews.map((interview) => (
-              <div key={interview.id} className="interview-card">
+              <div key={interview._id} className="interview-card">
                 <div className="interview-card-header">
                   <div className="interview-card-header-content">
                     <div className="interview-card-title-section">
-                      <h3 className="interview-card-title">{interview.subject}</h3>
+                      <h3 className="interview-card-title">
+                        Interview #{interview.interview_id}
+                      </h3>
                       <p className="interview-card-subtitle">
-                        {interview.name} • {interview.company}
+                        Created: {formatDate(interview.createdAt)}
+                        {isCompany && (
+                          <span style={{ marginLeft: "12px", opacity: 0.7 }}>
+                            • User: {interview.user_id}
+                          </span>
+                        )}
                       </p>
                     </div>
-                    <span className={`badge ${getStatusColor(interview.status)}`}>
-                      {interview.status}
-                    </span>
                   </div>
                 </div>
+
                 <div className="interview-card-content">
-                  <div className="interview-meta-grid">
-                    <div className="interview-meta-item">
-                      <Calendar className="interview-meta-icon" />
-                      <span>{new Date(interview.createdAt).toLocaleDateString()}</span>
-                    </div>
-                    <div className="interview-meta-item">
-                      <Clock className="interview-meta-icon" />
-                      <span>{interview.duration} minutes</span>
-                    </div>
-                  </div>
-                  <div className="interview-tags">
-                    <span className="badge badge-outline">{interview.difficulty}</span>
-                    <span className="interview-email">{interview.email}</span>
-                  </div>
                   <div className="interview-actions">
-                    {interview.status === "completed" ? (
-                      <Link to={`/feedback/${interview.id}`}>
-                        <button className="button button-outline button-sm">
-                          <Eye className="interview-meta-icon" />
-                          View Feedback
-                        </button>
-                      </Link>
-                    ) : (
-                      <Link to={`/interview/${interview.id}`}>
-                        <button className="button button-outline button-sm">
-                          <Eye className="interview-meta-icon" />
-                          Start Interview
-                        </button>
-                      </Link>
-                    )}
-                    <button 
+                    <div>
+                      <button
+                        className="button button-outline button-sm"
+                        onClick={() => {
+                          goToResults(interview.interview_id);
+                        }}
+                      >
+                        <Eye className="interview-meta-icon" />
+                        Show Result
+                      </button>
+                    </div>
+
+                    <button
                       className="button button-destructive button-sm"
-                      onClick={() => handleDelete(interview.id)}
+                      onClick={() => handleDelete(interview.interview_id)}
                     >
                       <Trash2 className="interview-meta-icon" />
                       Delete

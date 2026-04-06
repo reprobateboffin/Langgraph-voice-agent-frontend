@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useInterviewStore } from "../store/interviewStore";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import "./MessageScreen.css";
+import "../styles/MessageScreen.css";
 
-const SpeechRecognitionConstructor = 
+const SpeechRecognitionConstructor =
   (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
 const MessageScreenVoice: React.FC = () => {
@@ -39,7 +39,9 @@ const MessageScreenVoice: React.FC = () => {
     }
 
     if (!SpeechRecognitionConstructor) {
-      setError("Speech Recognition is not supported in your browser. Please use Chrome or Edge.");
+      setError(
+        "Speech Recognition is not supported in your browser. Please use Chrome or Edge.",
+      );
       return;
     }
 
@@ -53,7 +55,8 @@ const MessageScreenVoice: React.FC = () => {
 
   const initializeSpeechRecognition = useCallback(() => {
     try {
-      const recognition = new SpeechRecognitionConstructor() as SpeechRecognition;
+      const recognition =
+        new SpeechRecognitionConstructor() as SpeechRecognition;
       recognition.lang = "en-US";
       recognition.interimResults = false;
       recognition.continuous = false;
@@ -73,13 +76,18 @@ const MessageScreenVoice: React.FC = () => {
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech recognition error:", event.error);
         setListening(false);
-        
-        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+
+        if (
+          event.error === "not-allowed" ||
+          event.error === "service-not-allowed"
+        ) {
           setPermissionDenied(true);
-          setError("Microphone permission denied. Please allow microphone access and refresh the page.");
-        } else if (event.error === 'network') {
+          setError(
+            "Microphone permission denied. Please allow microphone access and refresh the page.",
+          );
+        } else if (event.error === "network") {
           setError("Network error occurred. Please check your connection.");
-        } else if (event.error === 'no-speech') {
+        } else if (event.error === "no-speech") {
           console.log("No speech detected, restarting...");
           setTimeout(() => {
             if (recognitionRef.current) {
@@ -124,11 +132,10 @@ const MessageScreenVoice: React.FC = () => {
       recognitionRef.current.onerror = null;
       recognitionRef.current.onresult = null;
       recognitionRef.current.onnomatch = null;
-      
+
       try {
         recognitionRef.current.stop();
-      } catch (err) {
-      }
+      } catch (err) {}
       recognitionRef.current = null;
     }
   }, []);
@@ -156,7 +163,13 @@ const MessageScreenVoice: React.FC = () => {
         initializeSpeechRecognition();
       }, 1000);
     }
-  }, [listening, isTyping, permissionDenied, cleanupSpeechRecognition, initializeSpeechRecognition]);
+  }, [
+    listening,
+    isTyping,
+    permissionDenied,
+    cleanupSpeechRecognition,
+    initializeSpeechRecognition,
+  ]);
 
   const stopListening = useCallback(() => {
     if (recognitionRef.current && listening) {
@@ -168,43 +181,46 @@ const MessageScreenVoice: React.FC = () => {
     }
   }, [listening]);
 
-  const speak = useCallback((text: string) => {
-    if (!window.speechSynthesis) {
-      console.error("Speech synthesis not supported");
-      startListening();
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    utterance.onstart = () => {
-      console.log("Speech synthesis started");
-      stopListening();
-    };
-
-    utterance.onend = () => {
-      console.log("Speech synthesis ended");
-      setTimeout(() => {
+  const speak = useCallback(
+    (text: string) => {
+      if (!window.speechSynthesis) {
+        console.error("Speech synthesis not supported");
         startListening();
-      }, 500);
-    };
+        return;
+      }
 
-    utterance.onerror = (event) => {
-      console.error("Speech synthesis error:", event);
-      setTimeout(() => {
-        startListening();
-      }, 500);
-    };
+      window.speechSynthesis.cancel();
 
-    synthesisRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-  }, [startListening, stopListening]);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      utterance.onstart = () => {
+        console.log("Speech synthesis started");
+        stopListening();
+      };
+
+      utterance.onend = () => {
+        console.log("Speech synthesis ended");
+        setTimeout(() => {
+          startListening();
+        }, 500);
+      };
+
+      utterance.onerror = (event) => {
+        console.error("Speech synthesis error:", event);
+        setTimeout(() => {
+          startListening();
+        }, 500);
+      };
+
+      synthesisRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+    },
+    [startListening, stopListening],
+  );
 
   const handleVoiceInput = async (userMsg: string) => {
     if (!userMsg.trim() || !threadId) {
@@ -258,14 +274,13 @@ const MessageScreenVoice: React.FC = () => {
 
       // Speak the assistant's response
       speak(assistantMsg);
-
     } catch (err) {
       console.error("API error:", err);
       setIsTyping(false);
       const errorMsg = "Sorry, I encountered an error. Please try again.";
       setError(errorMsg);
       addMessage({ role: "assistant", content: errorMsg, threadId });
-      
+
       setTimeout(() => {
         startListening();
       }, 2000);
@@ -300,7 +315,9 @@ const MessageScreenVoice: React.FC = () => {
   if (!threadId) {
     return (
       <div className="message-screen">
-        <div className="error-message">No interview session found. Please start a new interview.</div>
+        <div className="error-message">
+          No interview session found. Please start a new interview.
+        </div>
       </div>
     );
   }
@@ -310,21 +327,21 @@ const MessageScreenVoice: React.FC = () => {
       <div className="chat-header">
         <h2>Interview Chat (Voice)</h2>
         <div className="controls">
-          <button 
+          <button
             onClick={handleManualStartListening}
             disabled={listening || isTyping || permissionDenied}
             className="control-button"
           >
             🎤 Start Listening
           </button>
-          <button 
+          <button
             onClick={stopListening}
             disabled={!listening}
             className="control-button"
           >
             ⏸️ Stop Listening
           </button>
-          <button 
+          <button
             onClick={handleRetryMicrophone}
             className="control-button retry-button"
           >
@@ -334,7 +351,9 @@ const MessageScreenVoice: React.FC = () => {
       </div>
 
       {error && (
-        <div className={`error-message ${permissionDenied ? 'permission-error' : ''}`}>
+        <div
+          className={`error-message ${permissionDenied ? "permission-error" : ""}`}
+        >
           {error}
           {permissionDenied && (
             <div>
@@ -364,17 +383,17 @@ const MessageScreenVoice: React.FC = () => {
         )}
 
         {listening && (
-          <div className="listening-indicator">
-            🎤 Listening... Speak now
-          </div>
+          <div className="listening-indicator">🎤 Listening... Speak now</div>
         )}
 
         <div ref={messagesEndRef} />
       </div>
 
       <div className="status-bar">
-        <div className={`status ${listening ? 'listening' : ''} ${isTyping ? 'typing' : ''}`}>
-          Status: 
+        <div
+          className={`status ${listening ? "listening" : ""} ${isTyping ? "typing" : ""}`}
+        >
+          Status:
           {listening && " 🎤 Listening"}
           {isTyping && " 💭 Processing"}
           {!listening && !isTyping && " ✅ Ready"}

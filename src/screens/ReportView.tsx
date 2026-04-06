@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/ReportView.css";
 interface ReportViewProps {
   candidateName: string;
   jobTitle: string;
@@ -23,7 +23,7 @@ const ReportView: React.FC<ReportViewProps> = ({
     element.href = URL.createObjectURL(file);
     element.download = `report_${candidateName}_${jobTitle}.md`.replace(
       / /g,
-      "_"
+      "_",
     );
     document.body.appendChild(element);
     element.click();

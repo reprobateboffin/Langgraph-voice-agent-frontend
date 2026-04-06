@@ -1,0 +1,124 @@
+:root {
+  --bg: hsl(220, 20%, 7%);
+  --bg-light: hsla(220, 18%, 10%, 0.6);
+  --text: hsl(40, 10%, 92%);
+  --text-muted: hsl(220, 10%, 52%);
+  --primary: hsl(38, 92%, 55%);
+  --primary-dark: hsl(38, 92%, 48%);
+  --primary-light: hsl(38, 92%, 65%);
+  --border: hsla(220, 14%, 18%, 0.6);
+  --card-bg: hsla(220, 18%, 10%, 0.6);
+  --glow: hsla(38, 92%, 55%, 0.15);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, sans-serif;
+}
+
+.details-page {
+  min-height: 100vh;
+}
+
+/* NAV */
+.landing-nav {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  gap: 0.5rem;
+  font-weight: bold;
+}
+
+/* HERO */
+.details-hero {
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 3rem;
+}
+
+.hero-subtitle {
+  color: var(--text-muted);
+}
+
+/* FEATURES */
+.features-section {
+  padding: 4rem 2rem;
+}
+
+.features-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.feature-card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.feature-icon {
+  color: var(--primary);
+}
+
+.feature-title {
+  font-weight: bold;
+}
+
+.feature-desc {
+  color: var(--text-muted);
+}
+
+/* PRICING */
+.price {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.price-list {
+  color: var(--text-muted);
+}
+
+/* CTA */
+.final-info {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+/* BUTTONS */
+.btn-primary-landing {
+  background: var(--primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
+
+.btn-outline-landing {
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+}
+
+/* FOOTER */
+.landing-footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-copy {
+  color: var(--text-muted);
+}

@@ -33,28 +33,25 @@ export const api = {
 //   return response.json();
 // }
 joinMeeting: async (
-  username: string,
-  job_title: string,
-  question_type: string,
-  cv: File | null,
-  room_name: string
+  
+  room_name: string,
+  isCompany: Boolean
 ) => {
   const formData = new FormData();
-  formData.append("username", username);
-  formData.append("job_title", job_title);
-  formData.append("question_type", question_type);
-  formData.append("room_name", room_name)
 
-  if (cv) {
-    formData.append("cv", cv);
-  }
+  formData.append("room_name", room_name);
+formData.append('is_company', String(isCompany)); // "true" or "false"
 
-  const response = await fetch(`${BACKEND_URL}/join`, {
+
+
+  const response = await fetch(`${BACKEND_URL}/join-meeting`, {
     method: "POST",
     body: formData, // NO Content-Type header
   });
 
   return response.json();
 }
+
+
 
 };

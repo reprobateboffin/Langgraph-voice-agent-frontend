@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { useInterviewStore } from "../store/interviewStore";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import "./MessageScreen.css";
+import "../styles/MessageScreen.css";
 
 const MessageScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const MessageScreen: React.FC = () => {
     addQaPair,
     interviewStarted,
     setFinalEvaluation,
-    setFeedbackList
+    setFeedbackList,
   } = useInterviewStore();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -89,7 +88,9 @@ const MessageScreen: React.FC = () => {
         {isTyping && (
           <div className="message-bubble assistant typing-bubble">
             <div className="typing-indicator">
-              <span></span><span></span><span></span>
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
           </div>
         )}

@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import type { Message } from '../types/interview';
-
+import React, { useState, useRef, useEffect } from "react";
+import type { Message } from "../types/interview";
+import "../styles/ChatInterface.css";
 interface ChatInterfaceProps {
   candidateName: string;
   jobTitle: string;
@@ -22,11 +22,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onSendMessage,
   onShowReport,
 }) => {
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     e.preventDefault();
     if (inputMessage.trim()) {
       onSendMessage(inputMessage);
-      setInputMessage('');
+      setInputMessage("");
     }
   };
 
@@ -46,18 +46,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       <div className="chat-header">
         <h1>Interview: {jobTitle}</h1>
         <div className="interview-info">
-          <p><strong>Candidate:</strong> {candidateName || 'Not set'}</p>
-          <p><strong>CV:</strong> {cvFilename}</p>
-          <p><strong>Question Style:</strong> {questionStyle}</p>
+          <p>
+            <strong>Candidate:</strong> {candidateName || "Not set"}
+          </p>
+          <p>
+            <strong>CV:</strong> {cvFilename}
+          </p>
+          <p>
+            <strong>Question Style:</strong> {questionStyle}
+          </p>
         </div>
       </div>
 
       <div className="messages-container">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
-            <div className="message-content">
-              {message.content}
-            </div>
+            <div className="message-content">{message.content}</div>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -69,7 +73,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           placeholder="Type your answer..."
-          disabled={messages[messages.length - 1]?.content === '*Thinking...*'}
+          disabled={messages[messages.length - 1]?.content === "*Thinking...*"}
         />
         <button type="submit" disabled={!inputMessage.trim()}>
           Send

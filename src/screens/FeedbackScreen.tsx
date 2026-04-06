@@ -1,18 +1,17 @@
-
-
 import React from "react";
 import { useInterviewStore } from "../store/interviewStore";
-import "./FeedbackScreen.css";
+import "../styles/FeedbackScreen.css";
 
 const FeedbackScreen: React.FC = () => {
-  const { candidateName, jobTitle, feedbackList, finalEvaluation, qaPairs } = useInterviewStore();
+  const { candidateName, jobTitle, feedbackList, finalEvaluation, qaPairs } =
+    useInterviewStore();
 
   console.log("Debug - Store State:", {
     candidateName,
     jobTitle,
     feedbackList,
     finalEvaluation,
-    qaPairs
+    qaPairs,
   });
 
   if (!feedbackList || feedbackList.length === 0) {
@@ -37,43 +36,51 @@ const FeedbackScreen: React.FC = () => {
         <div className="rating">
           <strong>Overall Rating:</strong> {qf.rating}/10
         </div>
-        
-        {feedbackData && typeof feedbackData === 'object' ? (
+
+        {feedbackData && typeof feedbackData === "object" ? (
           <div className="feedback-breakdown">
             <h4>Detailed Breakdown:</h4>
             <div className="feedback-categories">
               {feedbackData.clarity && (
                 <div className="feedback-category">
                   <h5>🎯 Clarity</h5>
-                  <div className="score">Score: {feedbackData.clarity.score}/10</div>
+                  <div className="score">
+                    Score: {feedbackData.clarity.score}/10
+                  </div>
                   <p>{feedbackData.clarity.comment}</p>
                 </div>
               )}
-              
+
               {feedbackData.relevance && (
                 <div className="feedback-category">
                   <h5>🔗 Relevance</h5>
-                  <div className="score">Score: {feedbackData.relevance.score}/10</div>
+                  <div className="score">
+                    Score: {feedbackData.relevance.score}/10
+                  </div>
                   <p>{feedbackData.relevance.comment}</p>
                 </div>
               )}
-              
+
               {feedbackData.depth && (
                 <div className="feedback-category">
                   <h5>📊 Depth</h5>
-                  <div className="score">Score: {feedbackData.depth.score}/10</div>
+                  <div className="score">
+                    Score: {feedbackData.depth.score}/10
+                  </div>
                   <p>{feedbackData.depth.comment}</p>
                 </div>
               )}
-              
+
               {feedbackData.alignment && (
                 <div className="feedback-category">
                   <h5>🎯 Alignment</h5>
-                  <div className="score">Score: {feedbackData.alignment.score}/10</div>
+                  <div className="score">
+                    Score: {feedbackData.alignment.score}/10
+                  </div>
                   <p>{feedbackData.alignment.comment}</p>
                 </div>
               )}
-              
+
               {feedbackData.overall_comment && (
                 <div className="feedback-category overall-comment">
                   <h5>📋 Overall Comment</h5>
@@ -114,7 +121,7 @@ const FeedbackScreen: React.FC = () => {
     return (
       <div className="final-evaluation">
         <h2>📋 Final Evaluation</h2>
-        
+
         {evaluation.overall_quality !== undefined && (
           <div className="eval-section">
             <h3>⭐ Overall Quality</h3>
@@ -133,16 +140,19 @@ const FeedbackScreen: React.FC = () => {
           </div>
         )}
 
-        {evaluation.areas_for_improvement && evaluation.areas_for_improvement.length > 0 && (
-          <div className="eval-section">
-            <h3>📈 Areas for Improvement</h3>
-            <ul>
-              {evaluation.areas_for_improvement.map((area: string, index: number) => (
-                <li key={index}>{area}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {evaluation.areas_for_improvement &&
+          evaluation.areas_for_improvement.length > 0 && (
+            <div className="eval-section">
+              <h3>📈 Areas for Improvement</h3>
+              <ul>
+                {evaluation.areas_for_improvement.map(
+                  (area: string, index: number) => (
+                    <li key={index}>{area}</li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
 
         {evaluation.recommendation && (
           <div className="eval-section">
@@ -166,17 +176,21 @@ const FeedbackScreen: React.FC = () => {
       <h1>📊 Interview Feedback Report</h1>
 
       <div className="candidate-info">
-        <p><strong>👤 Candidate:</strong> {candidateName || "N/A"}</p>
-        <p><strong>💼 Position:</strong> {jobTitle || "N/A"}</p>
+        <p>
+          <strong>👤 Candidate:</strong> {candidateName || "N/A"}
+        </p>
+        <p>
+          <strong>💼 Position:</strong> {jobTitle || "N/A"}
+        </p>
       </div>
 
       <div className="questions-feedback">
         <h2>❓ Questions & Answers Feedback</h2>
-        
+
         {feedbackList.map((fb: any, idx: number) => (
           <div key={idx} className="feedback-item">
             <h3>Question {idx + 1}</h3>
-            
+
             {/* Show the actual question and answer */}
             <div className="qa-pair">
               <div className="question">
@@ -188,7 +202,7 @@ const FeedbackScreen: React.FC = () => {
                 <p>{qaPairs[idx]?.answer || "No answer recorded"}</p>
               </div>
             </div>
-            
+
             <div className="feedback-section">
               <h4>📝 Question Quality Feedback</h4>
               {renderQuestionFeedback(fb, idx)}

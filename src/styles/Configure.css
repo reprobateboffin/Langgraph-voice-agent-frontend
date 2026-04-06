@@ -2,6 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: hsl(220, 20%, 7%);          /* ← add this – matches your landing --bg */
 }
 
 .nav {
@@ -9,7 +10,7 @@
   display: flex;
   align-items: center;
   padding: 0 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid hsla(220, 18%, 10%, 0.6);
 }
 
 .back-link {
@@ -17,7 +18,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: #4f46e5;
+  color: hsl(38, 92%, 55%);
 }
 
 .configure-container {
@@ -26,6 +27,8 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+    background: hsl(220, 20%, 7%);          /* ← add this – matches your landing --bg */
+
 }
 
 .centered-content {
@@ -47,23 +50,21 @@
 
 .progress-bar {
   height: 8px;
-  background: #e0e0e0;
+  background:hsla(220, 18%, 10%, 0.6);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #4f46e5;
+  background: hsl(38, 92%, 55%);
   transition: width 0.3s ease;
 }
 
 .card {
-  background: #fff;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+background: #1f2937 !important;          /* gray-800 in Tailwind terms */  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   margin-bottom: 16px;
+color: hsla(0, 0%, 98%, 0.6);
 }
 
 .form-group {
@@ -81,7 +82,7 @@
 .form-group select,
 .form-group textarea {
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid hsla(220, 18%, 10%, 0.6);
   border-radius: 4px;
   font-size: 14px;
 }
@@ -93,8 +94,8 @@
 }
 
 .btn-primary {
-  background-color: #4f46e5;
-  color: white;
+  background-color: hsl(38, 92%, 55%);
+  color: hsla(220, 18%, 10%, 0.6);
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -103,8 +104,8 @@
 
 .btn-outline {
   background-color: transparent;
-  color: #4f46e5;
-  border: 1px solid #4f46e5;
+  color: hsl(38, 92%, 55%);
+  border: 1px solid hsl(38, 92%, 55%);
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
