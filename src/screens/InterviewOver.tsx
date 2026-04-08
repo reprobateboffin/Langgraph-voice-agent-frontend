@@ -1,15 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-interface InterviewOverProps {
-  room_name: string;
-}
-
-export default function InterviewOver({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: (val: boolean) => void;
-}) {
+export default function InterviewOver() {
   {
     const navigate = useNavigate();
     const { roomName } = useParams<{ roomName: string }>();
@@ -21,7 +14,7 @@ export default function InterviewOver({
 
           console.log(`Deleting room: ${room_name}`);
 
-          await fetch("http://localhost:8000/delete-room", {
+          await fetch(`${apiUrl}/delete-room`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

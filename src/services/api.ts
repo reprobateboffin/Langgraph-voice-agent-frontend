@@ -1,6 +1,6 @@
 // const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const api = {
     startInterview : async (formData: FormData) => {
         const response = await fetch(`${BACKEND_URL}/start_interview`, {
@@ -24,14 +24,7 @@ export const api = {
         });
         return response.json();
     },
-//   joinMeeting: async (username: string) => {
-//   const response = await fetch(`${BACKEND_URL}/join`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ username }),
-//   });
-//   return response.json();
-// }
+
 joinMeeting: async (
   
   room_name: string,

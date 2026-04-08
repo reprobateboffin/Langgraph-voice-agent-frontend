@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { ArrowLeft, Plus, Calendar, Trash2, Eye } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Eye } from "lucide-react";
 import "../styles/Dashboard.css";
 
 interface Interview {
@@ -14,6 +14,7 @@ interface Interview {
   interview_id: string;
   createdAt: string;
 }
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
@@ -31,7 +32,7 @@ const Dashboard = () => {
     if (!userId) return;
 
     try {
-      const response = await fetch("http://localhost:8000/get-interviews", {
+      const response = await fetch(`${apiUrl}/get-interviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +161,7 @@ const Dashboard = () => {
                         Created: {formatDate(interview.createdAt)}
                         {isCompany && (
                           <span style={{ marginLeft: "12px", opacity: 0.7 }}>
-                            • User: {interview.user_id}
+                            • Candidate Name: {interview.user_id}
                           </span>
                         )}
                       </p>

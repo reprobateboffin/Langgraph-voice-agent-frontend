@@ -1,17 +1,6 @@
-import {
-  useParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/StartInterview.css";
 import { useState } from "react";
-
-type TokenData = {
-  token: string;
-  url: string;
-  room_name: string;
-};
 
 const StartInterview = () => {
   const [searchParams] = useSearchParams(); // Gets query parameters
@@ -21,7 +10,6 @@ const StartInterview = () => {
   const { roomName } = useParams<{ roomName: string }>();
   const [isRecording, setIsRecording] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
 
   // const tokenData = (location.state as { tokenData: TokenData })?.tokenData;

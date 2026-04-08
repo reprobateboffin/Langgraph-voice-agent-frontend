@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  useNavigate,
-  Link,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 import "../styles/Configure.css";
 import { useInterviewStore } from "../store/interviewStore";
-import { api } from "../services/api";
+import LoadingSpinner from "../components/LoadingSpinner";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 interface InterviewForm {
   name: string;
@@ -16,20 +12,29 @@ interface InterviewForm {
   difficulty: string;
   questions: number;
   cv: File | null;
+  voice_id?: string; // ← new
+  face_id?: string;
+}
+
+interface Character {
+  id: string;
+  name: string;
+  voice_id: string;
+  image: string; // URL to image
+  face_id: string;
 }
 
 const Configure: React.FC = () => {
+  const [loading, _setLoading] = useState(false);
+
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const { username } = useParams<{ username: string }>();
   const saveInterview = useInterviewStore((s) => s.saveInterview);
-  const [searchParams] = useSearchParams(); // Gets query parameters
+  const [searchParams] = useSearchParams();
 
-  // Convert string "true" → actual boolean
   const isCompany = searchParams.get("isCompany") === "true";
-
-  // Optional: store in state if you need to change it later
-  const [isCompanyState, setIsCompanyState] = useState(isCompany);
+  const [isCompanyState, _setIsCompanyState] = useState(isCompany);
   const [name, setName] = useState(!isCompanyState ? username : "");
 
   const companyName = isCompanyState
@@ -38,51 +43,95 @@ const Configure: React.FC = () => {
 
   const [position, setPosition] = useState("");
   const [difficulty, setDifficulty] = useState("Broad");
-
   const [email, setEmail] = useState("");
   const [questions, setQuestions] = useState<number>(5);
   const [cv, setCv] = useState<File | null>(null);
-  const [steps, setSteps] = useState("3");
   const [error, setError] = useState("");
+
+  // ==================== NEW STATES FOR CHARACTERS ====================
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [selectedCharacterVoiceId, setSelectedCharacterVoiceId] = useState<
+    string | null
+  >(null);
+  const [faceId, setFaceId] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Fetch characters from FastAPI backend
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/characters`);
+        if (!res.ok) throw new Error("Failed to fetch characters");
+
+        const data: Character[] = await res.json();
+        setCharacters(data);
+
+        if (data.length > 0) {
+          const firstVoiceId = data[0].voice_id;
+          setSelectedCharacterVoiceId(firstVoiceId);
+          console.log("Auto-selected voice_id:", firstVoiceId);
+        }
+      } catch (err) {
+        console.error("Failed to fetch characters:", err);
+        setError("Could not load interviewer characters");
+        console.log(error);
+      }
+    };
+
+    fetchCharacters();
+  }, []); // ← empty dependency is fine here
   const handleNext = () => {
-    if (step < 3) setStep(step + 1);
+    if (step < 4) setStep(step + 1);
   };
 
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
   };
-  const joinRoom = async () => {
-    try {
-      // const data = await api.joinMeeting(name);
-      // setTokenData(data);
-    } catch (err) {
-      console.error("Failed to join meeting:", err);
+
+  // Vertical carousel helpers (shows exactly 2 characters at a time)
+  const nextSlide = () => {
+    if (currentIndex + 2 < characters.length) {
+      setCurrentIndex(currentIndex + 1);
     }
   };
+
+  const prevSlide = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!name || !position || !difficulty || !questions || !cv) {
+    if (
+      !name ||
+      !position ||
+      !difficulty ||
+      !questions ||
+      !cv ||
+      !selectedCharacterVoiceId
+    ) {
       setError("All fields are required.");
-      alert("fill all fields");
+      alert("Please fill all fields and select a character");
       return;
     }
+
     const payload: InterviewForm = {
       name,
       position,
       difficulty,
       questions,
       cv,
+      voice_id: selectedCharacterVoiceId,
+      face_id: faceId,
     };
     saveInterview(payload);
+
     function shortUUID() {
       return Math.random().toString(36).substring(2, 10);
     }
     const roomName = `interview-${shortUUID()}`;
 
     try {
-      // const data = await api.joinMeeting(name);
-
-      // // store it if you still want it in state
-      // setTokenData(data);
       const interviewLink = `${window.location.origin}/start-interview/${roomName}?isCompany=${isCompanyState}`;
       const formData = new FormData();
       const cleanName = name.replace(/[^a-zA-Z0-9._-]/g, "-");
@@ -91,54 +140,43 @@ const Configure: React.FC = () => {
       formData.append("room_name", roomName);
       formData.append("question_type", difficulty);
       formData.append("max_step", String(questions ?? 2));
+      formData.append("voice_id", selectedCharacterVoiceId); // ← NEW
+
+      formData.append("face_id", faceId); // ← NEW
+
       if (isCompanyState) {
         formData.append("company_name", companyName);
       }
-      // ✅ THIS is how you send CV
       if (cv) {
         formData.append("cv", cv);
       }
-      //save the room in db
-      const res = await fetch("http://localhost:8000/register-room", {
+
+      // Save room in DB
+      const res = await fetch(`${apiUrl}/register-room`, {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
       console.log(data);
-      // In your handleSubmit function, replace the navigation part:
+
       if (isCompanyState) {
-        const response = await fetch("http://127.0.0.1:8000/send-invite", {
+        const response = await fetch(`${apiUrl}/send-invite`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            link: interviewLink,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, link: interviewLink }),
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to send email invitation");
-        }
+        if (!response.ok) throw new Error("Failed to send email invitation");
 
-        const url = `/start-interview/${roomName}?isCompany=${isCompanyState}`;
-        console.log("🔵 About to navigate to:", url);
-        console.log("🔵 isCompanyState value:", isCompanyState);
-        console.log("🔵 isCompanyState type:", typeof isCompanyState);
-
-        // Use replace instead of navigate to avoid any history issues
         navigate(-1);
       } else {
         const url = `/start-interview/${roomName}?isCompany=${isCompanyState}`;
-        console.log("🟢 About to navigate to:", url);
         navigate(url, { replace: true });
       }
     } catch (err) {
-      console.error("Failed to join meeting:", err);
+      console.error("Failed to create interview:", err);
     }
-    // }
   };
 
   return (
@@ -155,33 +193,33 @@ const Configure: React.FC = () => {
           </div>
         </div>
       </nav>
+
       <div className="configure-container">
         <div className="centered-content">
           {/* Progress */}
           <div className="progress-container">
             <div className="progress-info">
-              <span>Step {step} of 3</span>
+              <span>Step {step} of 4</span>
               <span>
                 {step === 1 && "User Info"}
                 {step === 2 && "Interview Settings"}
-                {step === 3 && "Resources"}
-                {step === 4 && "steps"}
+                {step === 3 && "Choose Interviewer"}
+                {step === 4 && "Resources"}
               </span>
             </div>
             <div className="progress-bar">
               <div
                 className="progress-fill"
-                style={{ width: `${(step / 3) * 100}%` }}
+                style={{ width: `${(step / 4) * 100}%` }}
               />
             </div>
           </div>
 
-          {/* STEP 1 */}
+          {/* STEP 1 - User Information */}
           {step === 1 && (
             <div className="card">
               <h2>User Information</h2>
               <p>Basic candidate information</p>
-
               <div className="form-group">
                 <label htmlFor="name">Full Name</label>
                 <input
@@ -193,9 +231,9 @@ const Configure: React.FC = () => {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              {isCompanyState ? (
+              {isCompanyState && (
                 <div className="form-group">
-                  <label htmlFor="name">Email</label>
+                  <label htmlFor="email">Email</label>
                   <input
                     id="email"
                     type="text"
@@ -204,7 +242,7 @@ const Configure: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-              ) : null}
+              )}
               <div className="form-group">
                 <label htmlFor="position">Position</label>
                 <input
@@ -218,12 +256,11 @@ const Configure: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 2 */}
+          {/* STEP 2 - Interview Setup */}
           {step === 2 && (
             <div className="card">
               <h2>Interview Setup</h2>
               <p>Configure interview difficulty and question count</p>
-
               <div className="form-group">
                 <label htmlFor="difficulty">Difficulty Level</label>
                 <select
@@ -231,13 +268,12 @@ const Configure: React.FC = () => {
                   onChange={(e) => setDifficulty(e.target.value)}
                 >
                   <option value="">Select difficulty</option>
-                  <option value="junior"> Broad, follow-up</option>
+                  <option value="junior">Broad, follow-up</option>
                   <option value="mid">Narrow, follow up</option>
                   <option value="senior">Broad, non follow up</option>
                   <option value="expert">Narrow, non follow up</option>
                 </select>
               </div>
-
               <div className="form-group">
                 <label htmlFor="questions">Number of Questions</label>
                 <input
@@ -252,13 +288,81 @@ const Configure: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 3 */}
           {step === 3 && (
             <div className="card">
+              <h2>Choose Interviewer</h2>
+              <p>Select the AI character who will conduct the interview</p>
+
+              {characters.length === 0 ? (
+                loading && <LoadingSpinner size="small" />
+              ) : (
+                // <p>Loading...</p>
+                <>
+                  <div className="character-carousel">
+                    {characters
+                      .slice(currentIndex, currentIndex + 2)
+                      .map((char) => (
+                        <div
+                          key={char.id}
+                          className={`character-card ${
+                            selectedCharacterVoiceId === char.voice_id
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedCharacterVoiceId(char.voice_id);
+                            setFaceId(char.face_id);
+                            console.log(
+                              "Selected voice_id:",
+                              selectedCharacterVoiceId,
+                            );
+                          }}
+                        >
+                          <img
+                            src={char.image}
+                            alt={char.name}
+                            className="character-image"
+                          />
+                          <p className="character-name">{char.name}</p>
+                        </div>
+                      ))}
+                  </div>
+
+                  {/* Navigation arrows */}
+                  <div className="carousel-nav">
+                    <button
+                      onClick={prevSlide}
+                      disabled={currentIndex === 0}
+                      className="nav-btn"
+                    >
+                      <ChevronUp size={24} />
+                    </button>
+                    <button
+                      onClick={nextSlide}
+                      disabled={currentIndex + 2 >= characters.length}
+                      className="nav-btn"
+                    >
+                      <ChevronDown size={24} />
+                    </button>
+                  </div>
+
+                  {selectedCharacterVoiceId && (
+                    <p className="selected-info">
+                      Selected:{" "}
+                      {characters.find(
+                        (c) => c.voice_id === selectedCharacterVoiceId,
+                      )?.name || "Unknown"}
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+          {/* STEP 4 - Resources (old Step 3) */}
+          {step === 4 && (
+            <div className="card">
               <h2>Resources</h2>
-
               <p>Upload candidate CV</p>
-
               <div className="form-group">
                 <label htmlFor="cv">Candidate CV (PDF)</label>
                 <input
@@ -284,10 +388,9 @@ const Configure: React.FC = () => {
               Back
             </button>
 
-            {step < 3 ? (
+            {step < 4 ? (
               <button onClick={handleNext} className="btn-primary">
-                Next
-                <ArrowRight className="icon-small" />
+                Next <ArrowRight className="icon-small" />
               </button>
             ) : (
               <button onClick={handleSubmit} className="btn-primary">

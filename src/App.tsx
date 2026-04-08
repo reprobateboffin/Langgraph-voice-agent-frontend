@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import HomePage from "./screens/HomePage";
-import InterviewForm from "./screens/InterviewForm";
 import MessageScreen from "./screens/MessageScreen";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import ReportView from "./screens/ReportView";
-import FeedbackScreen from "./screens/FeedbackScreen";
 import MessageScreenVoice from "./screens/MessageScreenVoice";
 import Configure from "./screens/Configure";
 import Dashboard from "./screens/Dashboard";
@@ -22,15 +17,17 @@ import RegisterOrg from "./screens/RegisterOrg";
 import LoginOrg from "./screens/LoginOrg";
 import InterviewOver from "./screens/InterviewOver";
 import InterviewResults from "./screens/InterviewResults";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Use null for "loading"
-  const [user, setUser] = useState(null);
+  const [, setUser] = useState(null);
 
   useEffect(() => {
     // This runs as soon as the website loads
     const checkAuth = async () => {
       try {
-        const res = await fetch("http://localhost:8000/me", {
+        const res = await fetch(`${apiUrl}/me`, {
           credentials: "include", // Required to send the HttpOnly cookie
         });
         if (res.ok) {
@@ -45,17 +42,6 @@ function App() {
       }
     };
     checkAuth();
-    const cleanupRooms = async () => {
-      try {
-        await fetch("http://localhost:8000/cleanup-old-rooms", {
-          method: "DELETE",
-        });
-      } catch (err) {
-        console.error("Cleanup failed:", err);
-      }
-    };
-
-    cleanupRooms();
   }, []);
   if (isAuthenticated === null) return <div>Loading...</div>;
   return (
@@ -86,13 +72,9 @@ function App() {
             element={<StartInterview />}
           />
           <Route path="/meeting-room/:roomName" element={<MeetingRoom />} />
-          <Route
-            path="/interview-over/:roomName"
-            element={<InterviewOver setIsAuthenticated={setIsAuthenticated} />}
-          />
+          <Route path="/interview-over/:roomName" element={<InterviewOver />} />
           <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
             <Route path="/:username/home" element={<HomePage />} />
-            <Route path="/report" element={<InterviewForm />} />
             <Route path="/messages-chat" element={<MessageScreen />} />
             <Route path="/messages-voice" element={<MessageScreenVoice />} />
             <Route path="/:username/configure" element={<Configure />} />
@@ -100,11 +82,7 @@ function App() {
             <Route path="/results" element={<InterviewResults />} />
 
             <Route path="/meeting-room" element={<MeetingRoom />} />
-            <Route path="/feedback" element={<FeedbackScreen />} />
-            <Route
-              path="/profile"
-              element={<Profile setIsAuthenticated={setIsAuthenticated} />}
-            />
+            <Route path="/:username/profile" element={<Profile />} />
           </Route>
         </Routes>
       </div>

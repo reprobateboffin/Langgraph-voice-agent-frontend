@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 import { useState } from "react";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Register({
   setIsAuthenticated,
@@ -22,7 +23,7 @@ export default function Register({
       return;
     }
 
-    const res = await fetch("http://localhost:8000/register", {
+    const res = await fetch(`${apiUrl}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

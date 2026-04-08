@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { useState } from "react";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function LoginOrg({
   setIsAuthenticated,
@@ -15,7 +16,7 @@ export default function LoginOrg({
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8000/login-org", {
+    const res = await fetch(`${apiUrl}/login-org`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

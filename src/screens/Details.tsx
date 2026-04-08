@@ -7,9 +7,6 @@ import {
   Shield,
   Zap,
   Target,
-  Settings,
-  Sliders,
-  Upload,
   Sparkles,
   CheckCircle2,
 } from "lucide-react";

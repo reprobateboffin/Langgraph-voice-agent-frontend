@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 import { useState } from "react";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 interface RegisterOrgProps {
   setIsAuthenticated: (val: boolean) => void;
@@ -39,7 +40,7 @@ export default function RegisterOrg({ setIsAuthenticated }: RegisterOrgProps) {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/register-org", {
+      const res = await fetch(`${apiUrl}/register-org`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

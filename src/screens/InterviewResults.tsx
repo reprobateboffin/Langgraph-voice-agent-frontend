@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import "../styles/InterviewResults.css";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 const InterviewResults = () => {
   const [searchParams] = useSearchParams();
@@ -16,7 +17,7 @@ const InterviewResults = () => {
       if (!interview_id) return;
 
       try {
-        const res = await fetch("http://localhost:8000/get-interview-results", {
+        const res = await fetch(`${apiUrl}/get-interview-results`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -35,10 +36,6 @@ const InterviewResults = () => {
 
     fetchResults();
   }, [interview_id]);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString();
-  };
 
   if (loading) {
     return (

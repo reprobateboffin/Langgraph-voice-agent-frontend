@@ -1,49 +1,23 @@
 import React from "react";
-import {
-  useNavigate,
-  Link,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { useInterviewStore } from "../store/interviewStore";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 
-import {
-  ArrowRight,
-  Clock,
-  FileText,
-  Mic,
-  BarChart,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Clock, FileText, Mic, BarChart } from "lucide-react";
 import "../styles/HomePage.css"; // Plain CSS
-import { motion } from "framer-motion";
 import HomeNavBar from "../components/ui/HomeNavBar";
 
 const HomePage: React.FC = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams(); // Gets query parameters
 
   // Convert string "true" → actual boolean
   const isCompany = searchParams.get("isCompany") === "true";
 
   // Optional: store in state if you need to change it later
-  const [isCompanyState, setIsCompanyState] = useState(isCompany);
+  const [isCompanyState, _setIsCompanyState] = useState(isCompany);
   const { username } = useParams<{ username: string }>();
   console.log(username);
   const id = username;
-  const { setMode } = useInterviewStore();
-  const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(true);
-  const onChatClick = () => {
-    setMode("chat");
-    navigate("/report");
-  };
-  const ease = [0.16, 1, 0.3, 1] as const; // helps TS understand it's a tuple
-
-  const onAgentClick = () => {
-    setMode("voice");
-    navigate("/report");
-  };
+  const [isLoggedIn, _setIsLoggedIn] = useState<Boolean>(true);
 
   return (
     <div className="homepage">

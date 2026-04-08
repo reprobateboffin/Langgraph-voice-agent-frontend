@@ -1,0 +1,118 @@
+/* Profile Page Wrapper */
+.profile-page {
+  min-height: 100vh;
+  background: hsl(220, 20%, 7%);
+  color: hsl(40, 10%, 92%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Container */
+.profile-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  text-align: center;
+}
+
+/* Title */
+.profile-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+
+/* Card */
+.profile-card {
+  background: hsla(220, 18%, 10%, 0.7);
+  border: 1px solid hsla(220, 14%, 18%, 0.6);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+  transition: all 0.25s ease;
+}
+
+.profile-card:hover {
+  border-color: hsla(38, 92%, 55%, 0.3);
+  box-shadow: 0 8px 32px hsla(38, 92%, 55%, 0.08),
+              0 0 0 1px hsla(38, 92%, 55%, 0.1);
+}
+
+/* Rows */
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid hsla(220, 14%, 18%, 0.4);
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+/* Labels & Values */
+.label {
+  color: hsl(220, 10%, 52%);
+  font-size: 0.9rem;
+}
+
+.value {
+  font-weight: 600;
+  color: hsl(40, 10%, 92%);
+}
+
+/* Logout button spacing */
+.logout-btn {
+  width: 100%;
+  margin-top: 8px;
+}
+/* Navbar wrapper */
+.config-nav {
+  position: fixed;            /* 👈 THIS is the key */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+
+  border-bottom: 1px solid hsla(220, 14%, 18%, 0.5);
+  background: hsla(220, 20%, 7%, 0.7);
+  backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* Inner container */
+.config-nav-container {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* left aligned back button */
+}
+
+/* Back button */
+.dashboard-back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 0.9rem;
+  color: hsl(220, 10%, 52%);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dashboard-back-link:hover {
+  color: hsl(40, 10%, 92%);
+}
+
+/* Icon */
+.dashboard-meta-icon {
+  width: 18px;
+  height: 18px;
+}

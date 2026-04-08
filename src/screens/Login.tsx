@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { useState } from "react";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Login({
   setIsAuthenticated,
@@ -12,36 +13,10 @@ export default function Login({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const handleLogin = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const res = await fetch("http://localhost:8000/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, password }),
-  //     credentials: "include",
-  //   });
-  //   const data = await res.json();
-  //   console.log(data.username);
-  //   console.log(data);
-  //   if (res.ok) {
-  //     setIsAuthenticated(true);
-  //     console.log("Login successful:", data);
-  //     localStorage.setItem("userId", data.username);
-
-  //     const id = localStorage.getItem("userId");
-  //     navigate(`/${id}/home`, { replace: true });
-  //   } else {
-  //     const errorData = await res.json();
-  //     console.log(errorData);
-  //     alert(errorData.detail || "Login failed"); // Show error from FastAPI
-  //   }
-  //   console.log(email, password);
-  // };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/login", {
+      const res = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -192,7 +192,12 @@ export default function Landing() {
             transition={{ duration: 0.7, ease, delay: 0.5 }}
             className="hero-buttons"
           >
-            <button className="btn-primary-landing btn-lg">
+            <button
+              className="btn-primary-landing btn-lg"
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
               Start practicing free <ArrowRight className="btn-icon" />
             </button>
             <button

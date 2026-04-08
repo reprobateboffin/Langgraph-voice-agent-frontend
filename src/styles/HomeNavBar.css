@@ -1,0 +1,28 @@
+/* Profile button (icon only) */
+.profile-btn {
+  background: transparent;
+  border: 1px solid hsla(220, 14%, 18%, 0.8);
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.profile-btn:hover {
+  border-color: hsla(38, 92%, 55%, 0.4);
+  background: hsla(38, 92%, 55%, 0.08);
+}
+
+.profile-btn:active {
+  transform: scale(0.95);
+}
+
+/* Icon styling */
+.profile-icon {
+  width: 18px;
+  height: 18px;
+  color: hsl(40, 10%, 92%);
+}
