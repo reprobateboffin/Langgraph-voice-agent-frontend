@@ -1,139 +1,173 @@
-# 🌐 Frontend Implementation – React Interview Client
 
-This frontend implements the **client-side interface** for the AI Interview system. It is built with **React + Vite** and communicates exclusively with the backend services (FastAPI and LiveKit) via HTTP and WebRTC.
+# 🎤 AI Interview Platform — Frontend (React)
 
-The frontend is intentionally thin: it focuses on **user flow, session orchestration, and real-time interaction**, while all interview logic and reasoning remain on the backend.
-
----
-
-## 📘 Table of Contents
-
-1. Frontend Responsibilities
-2. Application Routing
-3. Interview Initialization Flow
-4. Text-Based Interview Flow
-5. Voice Interview Flow (LiveKit)
-6. Data Exchange with Backend
+Modern React frontend for the real-time voice-based AI Interview Platform. Built with React, React Router, and Tailwind CSS, it provides a seamless experience for both **individual users** practicing interviews and **organizations** conducting automated AI candidate interviews.
 
 ---
 
-## 1. Frontend Responsibilities
+## ✨ Features
 
-The frontend is responsible for:
+### 👤 For Individual Users
+- Practice interviews with AI interviewer
+- Upload and use your CV for personalized questions
+- Real-time voice + avatar interview experience
+- View interview history and detailed results
+- Profile management and configuration
 
-* Collecting interview configuration data from the user
-* Uploading CVs for backend processing
-* Initiating interview sessions
-* Displaying interview questions, responses, and feedback
-* Connecting users to LiveKit rooms for voice interviews
+### 🏢 For Organizations
+- Create and manage AI interview campaigns
+- Send automated interview invites via email
+- Track candidate progress (pending / completed)
+- View detailed interview results and evaluations
+- Team dashboard with analytics
 
-All stateful interview logic, persistence, evaluation, and orchestration are handled by the backend.
-
----
-
-## 2. Application Routing
-
-Routing is implemented using **React Router**. Each route corresponds to a discrete screen in the interview lifecycle.
-
-### Defined Routes
-
-* `/` → Home page
-* `/dashboard` → User dashboard and navigation
-* `/configure` → Interview configuration screen
-* `/start-interview` → Interview initialization
-* `/messages-chat` → Text-based interview interface
-* `/messages-voice` → Voice interview interface
-* `/meeting-room` → LiveKit meeting room
-* `/feedback` → Final feedback and evaluation view
-* `/report` → Interview report generation
-
-The routing layer does not contain interview logic; it only coordinates screen transitions.
+### 🎙️ Core Interview Experience
+- Real-time voice interaction via **LiveKit (WebRTC)**
+- AI-powered interviewer with natural conversation flow
+- Beautiful animated avatar with lip-sync (Simli)
+- Smooth fallback to voice-only mode
+- Automatic redirect after interview completion
+- 3-day grace period to retake unfinished interviews
 
 ---
 
-## 3. Interview Initialization Flow
+## 🛠️ Tech Stack
 
-The interview begins in the **configuration and start flow**, where the frontend collects:
-
-* Job title / role
-* Question difficulty or type
-* Optional CV upload
-* Username (used for LiveKit identity)
-
-Once collected, the frontend:
-
-1. Sends the configuration data to the FastAPI backend.
-2. Requests creation of a new interview session.
-3. Receives session identifiers (e.g., thread ID or LiveKit token).
-
-This flow is shared across both text-based and voice-based interviews.
+- **React 18** + TypeScript
+- **React Router v6** — File-based routing
+- **Tailwind CSS** — Styling
+- **Vite** — Build tool
+- **HttpOnly Cookies + JWT** — Authentication
+- **LiveKit** — Real-time WebRTC communication
 
 ---
 
-## 4. Text-Based Interview Flow
+## 📁 Project Structure Highlights
 
-For text interviews, the frontend:
-
-* Sends interview initialization data to the backend
-* Receives the first interview question
-* Displays the question in the chat UI
-* Sends user responses to the backend on each turn
-* Renders subsequent questions or final evaluation
-
-All conversational state is maintained server-side using LangGraph checkpoints.
-
----
-
-## 5. Voice Interview Flow (LiveKit)
-
-For voice interviews, the frontend performs the following steps:
-
-1. Collects job title, difficulty, CV, username, and room name.
-2. Sends this data to the backend join endpoint.
-3. Receives a LiveKit access token and server URL.
-4. Connects the user to the LiveKit room using WebRTC.
-
-When the user joins the room:
-
-* The backend dispatches the AI interviewer agent to the same room.
-* The agent reads the embedded interview state from room metadata.
-* The agent speaks the first interview question immediately.
-
-The frontend’s role during the voice interview is limited to:
-
-* Maintaining the WebRTC connection
-* Rendering connection and session status
-* Displaying optional transcripts or UI feedback
+```tsx
+src/
+├── screens/
+│   ├── Landing.tsx              # Public landing page
+│   ├── Login.tsx / Register.tsx
+│   ├── LoginOrg.tsx / RegisterOrg.tsx
+│   ├── HomePage.tsx             # Dashboard overview
+│   ├── Dashboard.tsx            # Interview history & results
+│   ├── StartInterview.tsx       # Start personal interview
+│   ├── MeetingRoom.tsx          # Live interview room (voice + avatar)
+│   ├── InterviewOver.tsx
+│   ├── InterviewResults.tsx
+│   ├── Profile.tsx
+│   ├── Configure.tsx
+│   └── ProtectedRoute.tsx
+├── components/
+│   ├── LoadingSpinner.tsx
+│   └── ... (modals, cards, etc.)
+└── App.tsx
+```
 
 ---
 
-## 6. Data Exchange with Backend
+## 🔀 User Flows
 
-### HTTP Communication (FastAPI)
+### 1. Individual User Flow (Practice Mode)
+1. User logs in → goes to `/username/home`
+2. Clicks **"Start Interview"**
+3. Redirected to `/start-interview/:roomName`
+4. Then enters `/meeting-room/:roomName`
+5. After interview → redirected to homepage with results
 
-The frontend communicates with FastAPI for:
+### 2. Organization / Candidate Flow
+1. Company sends invite link via email
+2. Candidate clicks link → lands on `/start-interview/:roomName`
+3. Joins meeting room directly
+4. After completion:
+   - Candidate sees modal: *"You will hear from HR soon"*
+   - Company can view results in their dashboard
 
-* Interview initialization
-* CV upload and processing
-* Interview continuation (text mode)
-* LiveKit token generation
-
-### Real-Time Communication (LiveKit)
-
-For voice interviews:
-
-* Audio, turn-taking, and streaming responses occur over WebRTC
-* No interview logic is executed in the browser
-* The frontend acts purely as a client for the LiveKit session
+### 3. Dashboard
+- **Personal Users**: See their own past interviews + results
+- **Organizations**: See all candidates with status:
+  - Pending (not started)
+  - In Progress
+  - Completed
+  - Expired (after 3 days)
 
 ---
 
-## ✅ Summary
+## 🔐 Authentication
 
-The frontend provides a **minimal but complete client implementation** for the AI Interview system. It focuses on:
+- **JWT stored in HttpOnly cookies** (secure)
+- All API requests use `credentials: "include"`
+- Automatic auth check on app load (`/me` endpoint)
+- Separate login flows for users and organizations
+- Protected routes using `<ProtectedRoute />`
 
-* Clear interview setup flows
-* Explicit routing and screen separation
-* Clean integration with FastAPI and LiveKit
+---
 
-By keeping all reasoning and persistence on the backend, the frontend remains lightweight, predictable,
+## 🚀 Key Screens & Routes
+
+| Route                            | Description                              | Access          |
+|----------------------------------|------------------------------------------|-----------------|
+| `/`                              | Landing Page                             | Public          |
+| `/login` / `/register`           | User authentication                      | Public          |
+| `/login-org` / `/register-org`   | Organization authentication              | Public          |
+| `/:username/home`                | Home + Quick Start Interview             | Protected       |
+| `/dashboard/:username`           | Interview history & results              | Protected       |
+| `/start-interview/:roomName`     | Interview initialization                 | Public/Protected|
+| `/meeting-room/:roomName`        | **Live AI Interview Room**               | Public/Protected|
+| `/interview-over/:roomName`      | Interview completion screen              | Protected       |
+| `/results`                       | Detailed interview results               | Protected       |
+| `/:username/profile`             | User profile                             | Protected       |
+
+---
+
+## 🎨 UI/UX Highlights
+
+- Clean, modern, professional design
+- Real-time loading states and spinners
+- Responsive design (mobile + desktop friendly)
+- Smooth transitions between screens
+- Clear separation between personal and organization modes
+- Informative modals after interview completion
+- Graceful handling of unfinished interviews (3-day redo window)
+
+---
+
+## 🧩 How It Works
+
+- **Meeting Room**: Uses LiveKit to connect user and AI agent in the same room
+- **Backend Communication**: All API calls include credentials for JWT cookie
+- **State Management**: Local React state + backend-driven interview state
+- **Post-Interview**: Automatic redirection + conditional modals based on user type
+
+---
+
+## 🏃‍♂️ Running the Frontend
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+Make sure your `.env` file contains:
+
+```env
+VITE_BACKEND_URL=https://your-backend-url.com
+```
+
+---
+
+## 🔗 Backend Repository
+
+[Backend & Agent Worker Repository](https://github.com/reprobateboffin/Langgraph-voice-agent-backend) *(replace with actual link)*
+
+---
+
+**Built for realistic, scalable, and delightful AI-powered interviews.**
+
