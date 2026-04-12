@@ -165,7 +165,7 @@ VITE_BACKEND_URL=https://your-backend-url.com
 
 ## 🔗 Backend Repository
 
-[Backend & Agent Worker Repository](https://github.com/reprobateboffin/Langgraph-voice-agent-backend) *(replace with actual link)*
+[Backend & Agent Worker Repository](https://github.com/reprobateboffin/Langgraph-voice-agent-backend) 
 
 ---
 
