@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-     "build": "vite build",
      "start": "serve -s dist -l $PORT"
   },
   "dependencies": {

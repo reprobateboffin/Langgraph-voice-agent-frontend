@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { useState } from "react";
+import Modal from "../components/Modal";
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Login({
@@ -12,7 +13,8 @@ export default function Login({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState("");
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -28,10 +30,12 @@ export default function Login({
       if (res.ok) {
         setIsAuthenticated(true);
         localStorage.setItem("userId", data.username);
-        navigate(`/${data.username}/home`, { replace: true });
+        navigate(`/${data.username}/home?isCompany=false`, { replace: true });
       } else {
         // Use the 'data' we already parsed above
-        alert(data.detail || "Login failed");
+        setError(data.detail);
+        setShowSuccessModal(true);
+        navigate("/login");
       }
     } catch (err) {
       console.error("Network or parsing error:", err);
@@ -86,6 +90,16 @@ export default function Login({
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate(-1);
+        }}
+        title="Error"
+      >
+        <p>Login Failed: {error}</p>
+      </Modal>
     </div>
   );
 }

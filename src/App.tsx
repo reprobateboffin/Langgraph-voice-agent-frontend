@@ -17,6 +17,7 @@ import RegisterOrg from "./screens/RegisterOrg";
 import LoginOrg from "./screens/LoginOrg";
 import InterviewOver from "./screens/InterviewOver";
 import InterviewResults from "./screens/InterviewResults";
+import LoadingSpinner from "./components/LoadingSpinner";
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
@@ -43,7 +44,47 @@ function App() {
     };
     checkAuth();
   }, []);
-  if (isAuthenticated === null) return <div>Loading...</div>;
+  if (isAuthenticated === null)
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#030712",
+          zIndex: 9999,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              width: "48px",
+              height: "48px",
+              border: "4px solid rgba(255,255,255,0.2)",
+              borderTopColor: "white",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          <p style={{ color: "#9ca3af", fontSize: "14px" }}>
+            Joining interview...
+          </p>
+        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
   return (
     <BrowserRouter>
       <div className="App">
@@ -68,7 +109,7 @@ function App() {
             element={<LoginOrg setIsAuthenticated={setIsAuthenticated} />}
           />
           <Route
-            path="/start-interview/:roomName"
+            path="/start-interview/:roomName/"
             element={<StartInterview />}
           />
           <Route path="/meeting-room/:roomName" element={<MeetingRoom />} />

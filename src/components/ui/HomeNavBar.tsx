@@ -11,21 +11,21 @@ interface HomeNavBarProps {
 
 const HomeNavBar: React.FC<HomeNavBarProps> = ({
   id,
-  onStartInterview,
-  onDashboard,
+  // onStartInterview,
+  // onDashboard,
   title = "InterviewAI",
 }) => {
   const navigate = useNavigate();
 
-  const handleStartInterview = () => {
-    if (onStartInterview) return onStartInterview();
-    navigate(`/${id}/configure`);
-  };
+  // const handleStartInterview = () => {
+  //   if (onStartInterview) return onStartInterview();
+  //   navigate(`/${id}/configure`);
+  // };
 
-  const handleDashboard = () => {
-    if (onDashboard) return onDashboard();
-    navigate("/dashboard");
-  };
+  // const handleDashboard = () => {
+  //   if (onDashboard) return onDashboard();
+  //   navigate("/dashboard");
+  // };
 
   const handleProfile = () => {
     navigate(id ? `/${id}/profile` : "/profile");

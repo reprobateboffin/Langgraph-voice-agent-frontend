@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 import "../styles/Configure.css";
 import { useInterviewStore } from "../store/interviewStore";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Modal from "../components/Modal";
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 interface InterviewForm {
@@ -26,13 +27,15 @@ interface Character {
 
 const Configure: React.FC = () => {
   const [loading, _setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showSuccessModalError, setShowSuccessModalError] = useState(false);
 
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const { username } = useParams<{ username: string }>();
   const saveInterview = useInterviewStore((s) => s.saveInterview);
   const [searchParams] = useSearchParams();
-
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const isCompany = searchParams.get("isCompany") === "true";
   const [isCompanyState, _setIsCompanyState] = useState(isCompany);
   const [name, setName] = useState(!isCompanyState ? username : "");
@@ -74,7 +77,6 @@ const Configure: React.FC = () => {
       } catch (err) {
         console.error("Failed to fetch characters:", err);
         setError("Could not load interviewer characters");
-        console.log(error);
       }
     };
 
@@ -86,6 +88,7 @@ const Configure: React.FC = () => {
 
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
+    if (step == 1) navigate(-1);
   };
 
   // Vertical carousel helpers (shows exactly 2 characters at a time)
@@ -111,7 +114,7 @@ const Configure: React.FC = () => {
       !selectedCharacterVoiceId
     ) {
       setError("All fields are required.");
-      alert("Please fill all fields and select a character");
+      setShowSuccessModalError(true);
       return;
     }
 
@@ -132,7 +135,7 @@ const Configure: React.FC = () => {
     const roomName = `interview-${shortUUID()}`;
 
     try {
-      const interviewLink = `${window.location.origin}/start-interview/${roomName}?isCompany=${isCompanyState}`;
+      const interviewLink = `${window.location.origin}/start-interview/${roomName}?isCompany=${isCompanyState}&image=${encodeURIComponent(selectedImage)}`;
       const formData = new FormData();
       const cleanName = name.replace(/[^a-zA-Z0-9._-]/g, "-");
       formData.append("username", cleanName);
@@ -164,21 +167,34 @@ const Configure: React.FC = () => {
         const response = await fetch(`${apiUrl}/send-invite`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, link: interviewLink }),
+          body: JSON.stringify({
+            email,
+            link: interviewLink,
+            username: username,
+            job_title: position,
+          }),
         });
 
         if (!response.ok) throw new Error("Failed to send email invitation");
 
-        navigate(-1);
+        setShowSuccessModal(true);
       } else {
-        const url = `/start-interview/${roomName}?isCompany=${isCompanyState}`;
+        const url = `/start-interview/${roomName}?isCompany=${isCompanyState}&image=${encodeURIComponent(selectedImage)}`;
         navigate(url, { replace: true });
       }
     } catch (err) {
       console.error("Failed to create interview:", err);
     }
   };
+  useEffect(() => {
+    if (showSuccessModal) {
+      const timer = setTimeout(() => {
+        navigate(-1);
+      }, 2000);
 
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessModal]);
   return (
     <div className="configure-page">
       <nav className="config-nav">
@@ -312,6 +328,7 @@ const Configure: React.FC = () => {
                           onClick={() => {
                             setSelectedCharacterVoiceId(char.voice_id);
                             setFaceId(char.face_id);
+                            setSelectedImage(char.image);
                             console.log(
                               "Selected voice_id:",
                               selectedCharacterVoiceId,
@@ -400,6 +417,25 @@ const Configure: React.FC = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate(-1);
+        }}
+        title="Success"
+      >
+        <p>The interview link is sent to the user.</p>
+      </Modal>
+      <Modal
+        isOpen={showSuccessModalError}
+        onClose={() => {
+          setShowSuccessModalError(false);
+        }}
+        title="Error"
+      >
+        <p> Failure: {error}</p>
+      </Modal>
     </div>
   );
 };

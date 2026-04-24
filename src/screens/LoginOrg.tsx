@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 import { useState } from "react";
+import Modal from "../components/Modal";
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-export default function LoginOrg({
+function LoginOrg({
   setIsAuthenticated,
 }: {
   setIsAuthenticated: (val: boolean) => void;
@@ -12,7 +13,8 @@ export default function LoginOrg({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState("");
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -32,7 +34,8 @@ export default function LoginOrg({
       const id = localStorage.getItem("orgId");
       navigate(`/${id}/home?isCompany=true`, { replace: true });
     } else {
-      alert(data.detail || "Login failed");
+      setError(data.detail);
+      setShowSuccessModal(true);
     }
   };
 
@@ -83,6 +86,18 @@ export default function LoginOrg({
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate(-1);
+        }}
+        title="Success"
+      >
+        <p>Login Failed: {error}</p>
+      </Modal>
     </div>
   );
 }
+
+export default LoginOrg;

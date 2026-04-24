@@ -8,10 +8,11 @@ const StartInterview = () => {
   const isCompany = searchParams.get("isCompany") === "true";
 
   const { roomName } = useParams<{ roomName: string }>();
+  const image = searchParams.get("image");
   const [isRecording, setIsRecording] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const navigate = useNavigate();
-
+  console.log(`the image link is ${image} and room name is ${roomName}`);
   // const tokenData = (location.state as { tokenData: TokenData })?.tokenData;
 
   // state: { job_title: position,question_type: difficulty, cv:cv, username:name, room_name: room_name, question_no: questions}
@@ -31,13 +32,20 @@ const StartInterview = () => {
   return (
     <div className="interview-container">
       <div className="avatar-wrapper">
-        <div className={`avatar ${isRecording ? "recording" : "muted"}`}></div>
+        <div className={`avatar ${isRecording ? "recording" : "muted"}`}>
+          {" "}
+          <img src={image || ""} className="char-image" />
+        </div>
       </div>
 
       <h2 className="status-text">
         <div>Hello You will join the meeting now</div>
         {!isStarted && "Ready to Start"}
         {isStarted && isRecording && "AI Interviewer is Listening..."}
+        <div className="expiry-text">
+          This interview link will expire in 3 days
+        </div>
+
         {isStarted && !isRecording && "Microphone Muted"}
       </h2>
 

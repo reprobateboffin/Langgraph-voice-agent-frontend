@@ -40,3 +40,73 @@
 .read-the-docs {
   color: #888;
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-content {
+  width: min(540px, 92vw);
+  background: #ffffff;
+  border-radius: 18px;
+
+  padding: 24px 26px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+
+  animation: modalIn 0.18s ease-out;
+  position: relative;
+}
+
+/* smooth entry */
+@keyframes modalIn {
+  from {
+    transform: translateY(10px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* title */
+.modal-content h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* content spacing */
+.modal-content p {
+  margin: 10px 0;
+  color: #334155;
+  font-size: 14px;
+}
+
+/* label styling */
+.modal-content strong {
+  color: #0f172a;
+}
+
+/* close button polish */
+.modal-content button {
+  margin-top: 18px;
+  width: 100%;
+  border-radius: 10px;
+}
+.modal-content button.button {
+  margin-top: 18px;
+  width: 100%;
+  border-radius: 10px;
+}

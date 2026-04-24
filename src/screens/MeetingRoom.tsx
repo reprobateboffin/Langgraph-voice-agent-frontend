@@ -12,6 +12,7 @@ import {
 } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Track } from "livekit-client";
+import Modal from "../components/Modal";
 
 const MeetingRoom: React.FC = () => {
   const { roomName } = useParams();
@@ -29,8 +30,8 @@ const MeetingRoom: React.FC = () => {
     question_type: string;
     question_no: number;
   } | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Custom view - Shows ONLY the Simli Avatar's video (Now properly constrained)
   const AvatarOnlyView = () => {
     const videoTracks = useTracks([Track.Source.Camera]);
 
@@ -80,8 +81,7 @@ const MeetingRoom: React.FC = () => {
         ) : (
           <div className="text-center text-white">
             <div className="text-7xl mb-6">🤖</div>
-            <p className="text-2xl">AI Interviewer is connecting...</p>
-            <p className="text-zinc-400 mt-2">Voice should start shortly</p>
+
           </div>
         )}
 
@@ -189,7 +189,8 @@ const MeetingRoom: React.FC = () => {
           className="w-full h-full"
           onDisconnected={() => {
             console.log("Disconnected from room");
-            isCompany ? navigate(`/interview-over/${roomName}`) : navigate("/");
+            setShowSuccessModal(true);
+            // isCompany ? navigate(`/`) : navigate("/");
           }}
         >
           <RoomAudioRenderer />
@@ -220,6 +221,30 @@ const MeetingRoom: React.FC = () => {
           </div>
         </LiveKitRoom>
       </div>
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate(-1);
+        }}
+        title="The End"
+      >
+        <p>
+          The Interview is Over, you will be hearing from the HR in case you are
+          selected. If you did not finish the interview you can still access it
+          till three days
+        </p>
+        {!isCompany && (
+          <button
+            className="button button-primary"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Go Home
+          </button>
+        )}
+      </Modal>
     </div>
   );
 };

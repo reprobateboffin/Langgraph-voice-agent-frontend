@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   console.log(username);
   const id = username;
+  console.log(`id aka username is ${id} and ${username}`);
   const [isLoggedIn, _setIsLoggedIn] = useState<Boolean>(true);
 
   return (
@@ -38,7 +39,13 @@ const HomePage: React.FC = () => {
           </div>
           <div className="hero-buttons">
             {!isCompanyState ? (
-              <Link to={isLoggedIn ? `/${id}/configure` : "/login"}>
+              <Link
+                to={
+                  isLoggedIn
+                    ? `/${id}/configure?isCompany=${isCompanyState}`
+                    : "/login"
+                }
+              >
                 <button className="btn-primary">
                   Start Interview <ArrowRight className="icon-small" />
                 </button>

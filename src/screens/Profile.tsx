@@ -32,8 +32,10 @@ const Profile = () => {
 
         const data: UserProfile = await response.json();
         setUser(data);
+        console.log(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);
+
         navigate("/login");
       } finally {
         setLoading(false);
